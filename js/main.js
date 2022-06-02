@@ -97,12 +97,19 @@ let lista = "";
   contador++;
   document.getElementById("contadorProducto").innerHTML=contador;
   
+  localStorage.setItem("contadorProducto", contador);//GUARDAR INFORMACION EN PAGINA WEB
+  
   let precio =(Math.floor (Math.random() * 50)*100)/100;
   let cantidad = parseFloat(txtNumber.value);
   totalEnProductos += (cantidad<=0)?Math.ceil(cantidad):parseInt(cantidad);
   document.getElementById("productosTotal").innerHTML = totalEnProductos;
+  
+  localStorage.setItem("productosTotal", totalEnProductos);
+
   costoTotal += ( precio * cantidad);
   total.innerHTML = `${costoTotal.toFixed(2)}`;
+
+  localStorage.setItem("costoTotal", costoTotal.toFixed(2));
   
   let tmp =
     `<tr>
@@ -129,3 +136,26 @@ txtNumber.addEventListener("blur", (event)=> {
 }
 );
 
+window.addEventListener("load", function() {
+
+  if(localStorage.getItem("contadorProducto")!=null); {
+    contador = parseInt(localStorage.getItem("contadorProducto"));
+    document.getElementById("contadorProducto").innerHTML=contador;
+  } //if contador de productos
+
+  if(localStorage.getItem("productosTotal")); {
+    totalEnProductos = parseInt(localStorage.getItem("productosTotal"));
+    document.getElementById("productosTotal").innerHTML=totalEnProductos;
+  } //if productos total
+
+  if(localStorage.getItem("costoTotal")); {
+    costoTotal = parseFloat(localStorage.getItem("costoTotal"));
+    total.innerHTML=costoTotal;
+  } //if costo total
+
+
+  // console.log(localStorage.getItem("contadorProducto"));
+  // console.log(localStorage.getItem("productosTotal"));
+  // console.log(localStorage.getItem("costoTotal"));
+}
+);
