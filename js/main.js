@@ -2,6 +2,7 @@
 let contador = 0;
 let costoTotal = 0;
 let totalEnProductos = 0;
+let datos = []; //Arreglo global para almacenar la lista de compras
 
 let element = document.getElementById("totalPrecio");
 element.innerHTML="Total en precio"
@@ -110,6 +111,19 @@ let lista = "";
   total.innerHTML = `${costoTotal.toFixed(2)}`;
 
   localStorage.setItem("costoTotal", costoTotal.toFixed(2));
+
+  //JSON
+  let elemento = `{
+    "id": ${contador}, 
+    "nombre": "${txtNombre.value}", 
+    "cantidad": ${txtNumber.value}, 
+    "precio":${precio}
+  }`//Poner entre comillas nombre porque es un string
+
+  datos.push(JSON.parse(elemento));
+  //console.log(datos);
+
+  localStorage.setItem("elementosTabla", JSON.stringify(datos));
   
   let tmp =
     `<tr>
@@ -138,24 +152,34 @@ txtNumber.addEventListener("blur", (event)=> {
 
 window.addEventListener("load", function() {
 
-  if(localStorage.getItem("contadorProducto")!=null); {
+  if(localStorage.getItem("contadorProducto")!=null) {
     contador = parseInt(localStorage.getItem("contadorProducto"));
     document.getElementById("contadorProducto").innerHTML=contador;
   } //if contador de productos
+  // console.log(localStorage.getItem("contadorProducto"));
 
-  if(localStorage.getItem("productosTotal")); {
+  if(localStorage.getItem("productosTotal")!=null) {
     totalEnProductos = parseInt(localStorage.getItem("productosTotal"));
     document.getElementById("productosTotal").innerHTML=totalEnProductos;
   } //if productos total
+  // console.log(localStorage.getItem("productosTotal"));
 
-  if(localStorage.getItem("costoTotal")); {
+  if(localStorage.getItem("costoTotal")!=null) {
     costoTotal = parseFloat(localStorage.getItem("costoTotal"));
     total.innerHTML=costoTotal;
   } //if costo total
-
-
-  // console.log(localStorage.getItem("contadorProducto"));
-  // console.log(localStorage.getItem("productosTotal"));
   // console.log(localStorage.getItem("costoTotal"));
+
+  if(localStorage.getItem("elementosTabla")!=null) {
+    datos=JSON.parse(localStorage.getItem("elementosTabla"));
+    datos.forEach(element => {
+      cuerpoTabla[0].innerHTML += `<tr>
+      <th scope="row">${element.id}</th>
+      <td>${element.nombre}</td>
+      <td>${element.cantidad}</td>
+      <td>${element.precio}</td>
+    </tr> `;
+    });
+  } //if elementosTabla 
 }
 );
